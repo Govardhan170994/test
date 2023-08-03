@@ -1,0 +1,25 @@
+# POD Deployment Manifest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+     name: mosquittopod
+     labels:
+       app: mosquitto
+    spec:
+      containers:
+      - name: mosquittocontainer
+        image: eclipse-mosquitto:1.6.2
+        ports:
+        - containerPort: 1883

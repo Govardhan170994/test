@@ -1,0 +1,106 @@
+### Install Java and Jenkins on RHEL 8
+---
+- name: Installation of Java and Jenkins
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install Java-JDK
+      yum: 
+        name: openjdk-11
+        state: present
+
+    - name: Install wget
+      yum:
+        name: wget
+        state: present
+
+    - name: Get jenkins .deb file
+      shell: wget https://pkg.jenkins.io/debian/binary/jenkins_2.412_all.deb
+    
+    - name: Extract the .deb files
+      shell: dpkg -i jenkins_2.412_all.deb
+
+    - name: Move the .deb files to new directory
+      shell: mkdir /home/jenkins
+      shell: mv *.deb /home/jenkins
+      shell: cd /home/jenkins
+
+    - name: Install Jenkins
+      yum:
+        name: jenkins
+        state: present
+    
+    - name: start the Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+
+---
+- name: Install Java and Jenkins on RHEL 8
+  hosts: jenkins_server
+  become: true
+
+  tasks:
+    - name: Add Jenkins Repository
+      yum_repository:
+        name: jenkins
+        baseurl: https://pkg.jenkins.io/redhat-stable
+        gpgcheck: yes
+        gpgkey: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+        state: present
+
+    - name: Install Java (OpenJDK 11)
+      package:
+        name: java-11-openjdk
+        state: present
+
+    - name: Install Jenkins
+      package:
+        name: jenkins
+        state: present
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: true
+
+
+
+
+---
+- name: Install Java and Jenkins on RHEL 8
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Install Java (OpenJDK 11)
+      package:
+        name: java-11-openjdk
+        state: present
+
+    - name: Add Jenkins Repository
+      yum_repository:
+        name: jenkins
+        baseurl: https://pkg.jenkins.io/redhat-stable
+        gpgcheck: yes
+        gpgkey: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+        state: present
+
+    - name: Install Jenkins
+      package:
+        name: jenkins
+        state: present
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: true
+
+    
+ 

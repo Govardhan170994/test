@@ -1,0 +1,16 @@
+### Create users on RHEL 8
+---
+- name: Create users on RHEL 8
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+
+  tasks:
+  - name: Create user
+    user:
+      name: test
+      password: prodevans
+      shell: /bin/bash
+      createhome: yes
+      state: present

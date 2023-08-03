@@ -1,0 +1,41 @@
+---
+- name: Installation of Java and Jenkins
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install Java-JDK
+      apt: 
+        name: openjdk-11
+        state: present
+
+    - name: Install wget
+      apt:
+        name: wget
+        state: present
+
+    - name: Get jenkins .deb file
+      shell: wget https://pkg.jenkins.io/debian/binary/jenkins_2.412_all.deb
+    
+    - name: Extract the .deb files
+      shell: dpkg -i jenkins_2.412_all.deb
+
+    - name: Move the .deb files to new directory
+      shell: mkdir /home/jenkins
+      shell: mv *.deb /home/jenkins
+      shell: cd /home/jenkins
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+    
+    - name: start the Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    
+ 

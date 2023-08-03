@@ -1,0 +1,9 @@
+#write a playbook to create a file
+---
+- name: Create file 
+  hosts: webservers
+  tasks:
+    - name: Creating file
+      file: 
+        path: /root/ansible-playbooks/hello.txt
+        state: touch

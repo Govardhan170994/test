@@ -1,0 +1,19 @@
+### Install HTTPD Application on RHEL 8
+
+---
+- name: Install httpd application on RHEL 8
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+  - name: Install httpd application
+    yum:
+      name: httpd
+      state: present
+
+  - name: Start and enable the service
+    service:
+      name: httpd
+      state: started
+      enabled: yes
